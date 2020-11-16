@@ -2,6 +2,7 @@ package utils
 
 import (
 	b "github.com/CkCreative/rest/book/models"
+	p "github.com/CkCreative/rest/product/models"
 	u "github.com/CkCreative/rest/user/models"
 	"github.com/jinzhu/gorm"
 
@@ -21,6 +22,13 @@ func ConnectDatabase() {
 
 	database.AutoMigrate(&b.Book{})
 	database.AutoMigrate(&u.User{})
+	database.AutoMigrate(&p.Product{})
+	database.AutoMigrate(&p.Customer{})
+	database.AutoMigrate(&p.Address{})
+	database.AutoMigrate(&p.Inventory{})
+	database.AutoMigrate(&p.CustomerOrder{})
+	database.AutoMigrate(&p.CustomerAddress{})
+	database.AutoMigrate(&p.CustomerOrderDelivery{})
 
 	DB = database
 }
