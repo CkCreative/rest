@@ -5,7 +5,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/CkCreative/rest/models"
+	"github.com/CkCreative/rest/user/models"
+	"github.com/CkCreative/rest/utils"
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
@@ -26,7 +27,7 @@ func Login(c *gin.Context) {
 func findOne(email, password string) map[string]interface{} {
 	user := &models.User{}
 
-	if err := models.DB.Where("Email = ?", email).First(user).Error; err != nil {
+	if err := utils.DB.Where("Email = ?", email).First(user).Error; err != nil {
 		var resp = map[string]interface{}{"status": false, "message": "Email address not found"}
 		return resp
 	}

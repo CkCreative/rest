@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/CkCreative/rest/models"
+	"github.com/CkCreative/rest/user/models"
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 )

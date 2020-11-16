@@ -1,7 +1,10 @@
-package models
+package utils
 
 import (
+	b "github.com/CkCreative/rest/book/models"
+	u "github.com/CkCreative/rest/user/models"
 	"github.com/jinzhu/gorm"
+
 	_ "github.com/jinzhu/gorm/dialects/sqlite" //connector
 )
 
@@ -16,8 +19,8 @@ func ConnectDatabase() {
 		panic("Failed to connect to database!")
 	}
 
-	database.AutoMigrate(&Book{})
-	database.AutoMigrate(&User{})
+	database.AutoMigrate(&b.Book{})
+	database.AutoMigrate(&u.User{})
 
 	DB = database
 }

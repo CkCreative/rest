@@ -1,9 +1,11 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 
-	"github.com/CkCreative/rest/models"
+	"github.com/CkCreative/rest/book/models"
+	"github.com/CkCreative/rest/utils"
 	"github.com/gin-gonic/gin"
 )
 
@@ -23,7 +25,7 @@ type UpdateBookInput struct {
 // Get all books
 func FindBooks(c *gin.Context) {
 	var books []models.Book
-	models.DB.Find(&books)
+	utils.DB.Find(&books)
 
 	c.JSON(http.StatusOK, gin.H{"data": books})
 }
@@ -34,13 +36,14 @@ func CreateBook(c *gin.Context) {
 	// CreateBookInput Validate input
 	var input CreateBookInput
 	if err := c.ShouldBindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		fmt.Println(err)
+
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Could not decode data"})
 		return
 	}
-
 	// Create book
 	book := models.Book{Title: input.Title, Author: input.Author}
-	models.DB.Create(&book)
+	utils.DB.Create(&book)
 
 	c.JSON(http.StatusOK, gin.H{"data": book})
 }
@@ -50,7 +53,7 @@ func CreateBook(c *gin.Context) {
 func FindBook(c *gin.Context) { // Get model if exist
 	var book models.Book
 
-	if err := models.DB.Where("id = ?", c.Param("id")).First(&book).Error; err != nil {
+	if err := utils.DB.Where("id = ?", c.Param("id")).First(&book).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
 		return
 	}
@@ -63,7 +66,7 @@ func FindBook(c *gin.Context) { // Get model if exist
 func UpdateBook(c *gin.Context) {
 	// Get model if exist
 	var book models.Book
-	if err := models.DB.Where("id = ?", c.Param("id")).First(&book).Error; err != nil {
+	if err := utils.DB.Where("id = ?", c.Param("id")).First(&book).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
 		return
 	}
@@ -71,11 +74,12 @@ func UpdateBook(c *gin.Context) {
 	// Validate input
 	var input UpdateBookInput
 	if err := c.ShouldBindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		fmt.Println(err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": "could not decode data"})
 		return
 	}
 
-	models.DB.Model(&book).Updates(input)
+	utils.DB.Model(&book).Updates(input)
 
 	c.JSON(http.StatusOK, gin.H{"data": book})
 }
@@ -85,11 +89,12 @@ func UpdateBook(c *gin.Context) {
 func DeleteBook(c *gin.Context) {
 	// Get model if exist
 	var book models.Book
-	if err := models.DB.Where("id = ?", c.Param("id")).First(&book).Error; err != nil {
+	if err := utils.DB.Where("id = ?", c.Param("id")).First(&book).Error; err != nil {
+		fmt.Println(err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
 		return
 	}
-	models.DB.Delete(&book, c.Param("id"))
+	utils.DB.Delete(&book, c.Param("id"))
 
 	c.JSON(http.StatusOK, gin.H{"data": true})
 }

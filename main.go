@@ -1,33 +1,20 @@
 package main
 
 import (
-	"github.com/CkCreative/rest/controllers"
-	"github.com/CkCreative/rest/middleware"
-	"github.com/CkCreative/rest/models"
+	bookRoutes "github.com/CkCreative/rest/book/routes"
+	userRoutes "github.com/CkCreative/rest/user/routes"
+	"github.com/CkCreative/rest/utils"
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
-	r := gin.Default()
+	router := gin.Default()
 
-	models.ConnectDatabase()
+	utils.ConnectDatabase()
 
-	r.GET("/books", controllers.FindBooks)
-	r.POST("/books", controllers.CreateBook)
-	r.GET("/books/:id", controllers.FindBook)
-	r.PATCH("/books/:id", controllers.UpdateBook)
-	r.DELETE("/books/:id", controllers.DeleteBook)
+	bookRoutes.Router(router)
+	userRoutes.Router(router)
 
-	r.GET("/users", controllers.FindUsers)
-	r.POST("/users", controllers.CreateUser)
-	r.POST("/login", controllers.Login)
-	r.GET("/users/:id", controllers.FindBook)
-	r.PATCH("/users/:id", controllers.UpdateBook)
-	r.DELETE("/users/:id", controllers.DeleteBook)
-
-	r.Use(middleware.JwtVerify())
-	r.GET("/auth", controllers.FindUsers)
-
-	r.Run()
+	router.Run()
 
 }
