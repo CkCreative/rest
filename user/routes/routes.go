@@ -12,7 +12,7 @@ func Router(r *gin.Engine) {
 	r.POST("/users", controllers.CreateUser)
 	r.POST("/login", controllers.Login)
 	r.PATCH("/users/:id", controllers.UpdateUser)
-	r.PATCH("/users/password/:id", controllers.UpdatePassword)
+	r.PATCH("/update-password/:id", controllers.UpdatePassword)
 
 	r.Use(middleware.JwtVerify())
 	r.GET("/auth", controllers.FindUsers)
